@@ -1,13 +1,195 @@
-# MCP Workflow Automation with Perplexity AI
 
-This project demonstrates **Model Context Protocol (MCP)** workflow automation by connecting GitHub issues with Slack notifications through Perplexity AI-powered summarization.
+
+
+# 🚀 MCP Workflow Automation with Perplexity AI
+
+This project automates developer workflows by integrating:
+
+- **GitHub Issues Monitoring**
+- **AI Summarization via Perplexity Sonar API**
+- **Slack Notifications**
+
+It uses the **Model Context Protocol (MCP)** architecture to simulate standardized AI-tool communication — making it easier to connect multiple systems into a single intelligent workflow.
+
+---
 
 ## 🌟 Features
-- **GitHub Integration**: Fetches open repository issues via GitHub API (simulating GitHub MCP Server)
-- **AI-Powered Summarization**: Uses Perplexity's Sonar API for intelligent issue analysis
-- **Slack Notifications**: Posts structured reports to Slack channels (simulating Slack MCP Server)  
-- **MCP Architecture**: Demonstrates standardized AI-tool communication patterns
-- **Cost-Effective**: Uses Perplexity's affordable Sonar models with free tier support
 
-## 🏗️ Architecture
+- **GitHub Integration:** Fetches and formats recent open issues automatically.
+- **AI-Powered Summarization:** Uses Perplexity’s *Sonar* AI models to generate actionable summaries.
+- **Slack Reporting:** Posts summaries and issue lists to teams via Slack.
+- **Enhanced Workflow Mode:** Supports different analysis types (`standard`, `detailed`, `quick`) with different models and prompts.
+- **Run Scheduling:** Can be set up as a cron job to run every few hours.
+- **Logging:** Tracks workflow runs in `workflow-logs.json`.
 
+---
+
+## 🏗 Architecture Overview
+
+The system is implemented in **Node.js** and has 3 main script types:
+
+### 1. **Base Workflow (`workflow.js`)**
+Handles:
+- Fetching issues from GitHub (`fetchGitHubIssues`)
+- Sending issues to Perplexity AI (`summarizeIssues`)
+- Formatting and posting to Slack (`postToSlack`)
+
+### 2. **Enhanced Workflow (`enhanced-workflow.js`)**
+Extends the base workflow with:
+- Different AI summarization modes (`standard`, `detailed`, `quick`)
+- Logging workflow runs to `workflow-logs.json`
+- Optional scheduling with `node-cron`
+
+### 3. **Testing Script (`test-workflow.js`)**
+Runs step-by-step checks for:
+1. GitHub API connectivity
+2. AI summarization
+3. Slack message posting
+
+---
+
+## 📦 Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/Automated-Project-Workflow-Management.git
+cd Automated-Project-Workflow-Management
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Create `.env` configuration
+Create a `.env` file in the root with:
+
+```env
+# GitHub Access
+GITHUB_TOKEN=ghp_yourgithubtoken
+TARGET_REPO=username/repository-name
+
+# Perplexity AI API
+PERPLEXITY_API_KEY=your_perplexity_api_key
+
+# Slack Access
+SLACK_BOT_TOKEN=xoxb-your-slack-bot-token
+SLACK_CHANNEL_NAME=your-slack-channel-id
+```
+
+**Notes:**
+- **GitHub Token**: Needs `repo` scope to read issues.
+- **Perplexity API Key**: Sign up at [Perplexity](https://perplexity.ai) and generate a token.
+- **Slack Token**: Create a Slack app, add `chat:write` scope, and install it to your workspace.
+- **Slack Channel ID**: Use `/who` in Slack or right-click the channel and copy its ID.
+
+---
+
+## ▶️ Running the Workflow
+
+### 1. Run standard workflow
+```bash
+node workflow.js
+```
+This will:
+- Fetch the last 5 open GitHub issues
+- Summarize them using Perplexity Sonar
+- Post a formatted report to Slack
+
+---
+
+### 2. Run enhanced workflow with logging
+```bash
+node enhanced-workflow.js
+```
+You can modify `generateAdvancedSummary` to choose between:
+- `standard` → balanced key issues and priorities
+- `detailed` → deep analysis with technical recommendations
+- `quick` → very short, bullet-style summary
+
+Example:
+```javascript
+summary = await this.generateAdvancedSummary(issues, 'detailed');
+```
+
+---
+
+### 3. Schedule the workflow
+In `enhanced-workflow.js`, uncomment:
+```javascript
+// cron.schedule('0 */6 * * *', () => {
+//   console.log('⏰ Running scheduled MCP workflow...');
+//   const orchestrator = new EnhancedMCPOrchestrator();
+//   orchestrator.runEnhancedWorkflow();
+// });
+```
+This example runs every 6 hours.
+
+Install cron support:
+```bash
+npm install node-cron
+```
+
+---
+
+## 🧪 Testing Components Individually
+
+Run:
+```bash
+node test-workflow.js
+```
+This will:
+1. Test GitHub API connection and issue fetching
+2. Summarize the first 2 issues with Perplexity AI
+3. Send a test summary to Slack
+
+If something fails, check your `.env` configuration and API keys.
+
+---
+
+## 📂 Log Files
+
+In **Enhanced Mode**, every run is logged to:
+```text
+workflow-logs.json
+```
+Fields include:
+- `timestamp`
+- `issuesProcessed`
+- `summaryLength`
+- `repository`
+- `success` (true/false)
+
+---
+
+## ⚠️ Common Issues & Troubleshooting
+
+### 1. *GitHub API authentication failed*
+- Ensure `GITHUB_TOKEN` is correct and has `repo` scope.
+- Check `TARGET_REPO` is in `username/repo` format.
+
+### 2. *Perplexity summarization error*
+- Verify `PERPLEXITY_API_KEY`
+- Ensure account has sufficient credits.
+
+### 3. *Slack posting failed*
+- Make sure the bot is invited to the target channel.
+- Check `SLACK_CHANNEL_NAME` uses the channel ID, **not** the name.
+
+---
+
+## 📋 Example Slack Output
+
+```
+🚀 GitHub Issues Summary Report
+📊 Generated by MCP Workflow Automation
+📅 8/15/2025, 7:30 PM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 AI ANALYSIS:
+Key Issues Summary...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 RECENT ISSUES (3):
+
+- #12: Crash in upload API (bug)
+- #11: Missing documentation (docs)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
