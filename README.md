@@ -1,7 +1,7 @@
 
 
 
-# 🚀 MCP Workflow Automation with Perplexity AI
+# 🚀 Workflow Automation with Perplexity AI
 
 This project automates developer workflows by integrating:
 
@@ -9,7 +9,6 @@ This project automates developer workflows by integrating:
 - **AI Summarization via Perplexity Sonar API**
 - **Slack Notifications**
 
-It uses the **Model Context Protocol (MCP)** architecture to simulate standardized AI-tool communication — making it easier to connect multiple systems into a single intelligent workflow.
 
 ---
 
